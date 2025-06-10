@@ -1,4 +1,4 @@
-import { User, Note, UsersNotes } from '../models/associations.js';
+import { User } from '../models/index.js';
 
 const getAllUsers = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ const createUser = async (req, res) => {
 const getOneUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate('notes', 'content -_id');
     if (!user) {
       res.status(404).json({ msg: 'User not found' });
       return;

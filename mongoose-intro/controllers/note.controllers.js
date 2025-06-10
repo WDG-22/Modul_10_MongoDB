@@ -1,9 +1,9 @@
-import { Note, User, UsersNotes } from '../models/associations.js';
+import { Note, User } from '../models/index.js';
 
 const getAllNotes = async (req, res) => {
   try {
-    const data = await Note.findAll();
-    res.json({ data });
+    const notes = await Note.find();
+    res.json({ data: notes });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Server error' });
@@ -13,10 +13,24 @@ const getAllNotes = async (req, res) => {
 const createNote = async (req, res) => {
   const { content, userId } = req.body;
   try {
-    // const data = await Note.create({ content, userId });
+    const note = await Note.create({ content, author: userId });
 
-    const note = await Note.create({ content });
-    await UsersNotes.create({ userId, noteId: note.id });
+    if (!note) {
+      res.status(500).json({ msg: 'Creating Note failed' });
+      return;
+    }
+
+    // const user = await User.findByIdAndUpdate(userId, { $push: { notes: note._id } });
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ msg: 'User not found' });
+      return;
+    }
+
+    user.notes.push(note._id);
+    await user.save();
 
     res.status(201).json({ data: note });
   } catch (error) {
@@ -28,7 +42,7 @@ const createNote = async (req, res) => {
 const getOneNote = async (req, res) => {
   const { id } = req.params;
   try {
-    const data = await Note.findByPk(id, { include: User });
+    const data = await Note.findById(id).populate('author', 'firstName');
     if (!data) {
       res.status(404).json({ msg: 'Note not found' });
       return;
@@ -44,12 +58,18 @@ const updateNote = async (req, res) => {
   const { content } = req.body;
   const { id } = req.params;
   try {
-    const [rowCount, notes] = await Note.update({ content }, { where: { id }, returning: true });
-    if (!rowCount) {
+    // const note = await Note.findByIdAndUpdate(id, { content, $inc: {__v: 1} }, {new: true});
+
+    const note = await Note.findById(id);
+    if (!note) {
       res.status(404).json({ msg: 'Note not found' });
       return;
     }
-    res.json({ data: notes[0] });
+
+    note.content = content;
+    await note.save();
+
+    res.json({ data: note });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Server error' });
@@ -59,8 +79,8 @@ const updateNote = async (req, res) => {
 const deleteNote = async (req, res) => {
   const { id } = req.params;
   try {
-    const rowCount = await Note.destroy({ where: { id } });
-    if (!rowCount) {
+    const note = await Note.findByIdAndDelete(id);
+    if (!note) {
       res.status(404).json({ msg: 'Note not found' });
       return;
     }

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { User, Note, UsersNotes } from '../models/associations.js';
 import { getAllUsers, createUser, getOneUser, updateUser, deletUser } from '../controllers/user.controllers.js';
 
 const userRouter = Router();

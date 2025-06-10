@@ -1,13 +1,16 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../db/index.js';
+import { Schema, model } from 'mongoose';
 
-const Note = sequelize.define('note', {
+const noteSchema = new Schema({
   content: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+    type: String,
+    required: true,
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
   },
 });
 
-// Note.sync();
+const Note = model('note', noteSchema);
 
 export default Note;
