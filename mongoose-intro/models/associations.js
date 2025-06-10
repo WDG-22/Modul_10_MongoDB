@@ -7,8 +7,8 @@ import sequelize from '../db/index.js';
 
 const UsersNotes = sequelize.define('UsersNotes');
 
-User.belongsToMany(Note, { through: 'UsersNotes' });
-Note.belongsToMany(User, { through: 'UsersNotes' });
+// User.belongsToMany(Note, { through: 'UsersNotes' });
+// Note.belongsToMany(User, { through: 'UsersNotes' });
 
 // sequelize.sync({ force: true });
 sequelize.sync();

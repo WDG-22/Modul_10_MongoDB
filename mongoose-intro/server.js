@@ -4,6 +4,10 @@ import chalk from 'chalk';
 import userRouter from './routers/user.router.js';
 import noteRouter from './routers/note.router.js';
 
+import { initDB } from './db/index.js';
+
+await initDB();
+
 const app = express();
 const port = process.env.PORT || 8000;
 
