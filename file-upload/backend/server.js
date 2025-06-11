@@ -17,9 +17,9 @@ app.post('/file-upload', upload.single('image'), (req, res) => {
   // console.log(req.body);
   console.log(req.file);
 
-  const location = `${req.protocol}://${req.host}/${req.file.filename}`;
+  // const location = `${req.protocol}://${req.host}/${req.file.filename}`;
 
-  res.json({ message: 'File upload successful', location });
+  res.json({ message: 'File upload successful', location: req.file.secure_url });
 });
 
 app.use((err, req, res, next) => {

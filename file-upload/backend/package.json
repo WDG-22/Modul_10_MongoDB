@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch server.js",
+    "dev": "node --watch --env-file=.env server.js",
     "start": "node server.js"
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cloudinary": "^2.6.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "multer": "^2.0.1"
