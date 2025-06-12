@@ -4,6 +4,7 @@ const readingListEntry = new Schema({
   bookRefId: {
     type: Schema.Types.ObjectId,
     ref: 'book',
+    required: true,
   },
   status: {
     type: String,

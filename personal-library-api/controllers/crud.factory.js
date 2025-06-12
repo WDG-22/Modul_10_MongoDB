@@ -19,7 +19,7 @@ const getOne = (Model) => async (req, res) => {
 
 const updateOne = (Model) => async (req, res) => {
   const { id } = req.params;
-  const data = await Model.findByIdAndUpdate(id, req.body, { new: true }); // , upsert: true
+  const data = await Model.findByIdAndUpdate(id, req.body, { new: true });
   if (!data) throw new ErrorResponse(`${Model.modelName} not found`, 404);
   res.json({ data });
 };
